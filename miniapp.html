@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falverix Clan Join</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            color: #00ffea;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Центрируем название */
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 234, 0.2);
+        }
+        .site-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00ffea;
+            text-shadow: 0 0 10px #00ffea;
+            text-decoration: none;
+        }
+        .container {
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 234, 0.3);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 25px;
+            color: #00ffea;
+            text-shadow: 0 0 10px #00ffea;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #00ffea;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #00ffea;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="file"] {
+            display: none; /* Скрываем стандартный input */
+        }
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00ffea;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 2px solid #00ffea;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .file-upload-label:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+        #file-preview {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+        .file-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+            gap: 10px;
+        }
+        .file-action-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00ffea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .file-action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        .file-action-btn i {
+            color: #00ffea;
+            font-size: 16px;
+            text-shadow: 0 0 10px #00ffea;
+        }
+        @keyframes iconAppear {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .file-action-btn.appear {
+            animation: iconAppear 0.3s ease forwards;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff00ff, #00ffea);
+            color: #121212;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00ffea;
+            text-shadow: 0 0 10px #00ffea;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <span class="site-title">Falverix</span>
+    </nav>
+    <div class="container">
+        <h1>Вступить в клан Falverix</h1>
+        <input type="text" id="username" placeholder="Ваш никнейм" required>
+        <textarea id="message" placeholder="Почему вы хотите вступить в клан?" rows="4" required></textarea>
+        <div class="file-upload">
+            <label for="file" class="file-upload-label">
+                <span>Сколько у вас часов (прикрепите скриншот)</span>
+            </label>
+            <input type="file" id="file" accept="image/*" required>
+            <div class="file-actions" id="file-actions">
+                <div class="file-action-btn" id="edit-file" title="Поменять изображение">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <div class="file-action-btn" id="delete-file" title="Удалить изображение">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <img id="file-preview" alt="Предпросмотр файла">
+        </div>
+        <button class="btn" onclick="submitRequest()">Отправить заявку</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        const webApp = window.Telegram.WebApp;
+        webApp.ready();
+
+        const fileInput = document.getElementById('file');
+        const filePreview = document.getElementById('file-preview');
+        const fileActions = document.getElementById('file-actions');
+        const editFileBtn = document.getElementById('edit-file');
+        const deleteFileBtn = document.getElementById('delete-file');
+
+        // Показ предпросмотра файла и кнопок действий
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                filePreview.src = URL.createObjectURL(file);
+                filePreview.style.display = 'block';
+                fileActions.style.display = 'flex';
+                // Добавляем анимацию появления для кнопок
+                editFileBtn.classList.add('appear');
+                deleteFileBtn.classList.add('appear');
+            }
+        });
+
+        // Удаление файла
+        deleteFileBtn.addEventListener('click', function() {
+            fileInput.value = ''; // Очищаем input
+            filePreview.src = '';
+            filePreview.style.display = 'none';
+            fileActions.style.display = 'none';
+        });
+
+        // Замена файла
+        editFileBtn.addEventListener('click', function() {
+            fileInput.click(); // Открываем выбор файла
+        });
+
+        async function submitRequest() {
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+            const file = document.getElementById('file').files[0];
+            const responseDiv = document.getElementById('response');
+
+            if (!username || !message || !file) {
+                responseDiv.innerHTML = 'Пожалуйста, заполните все поля и прикрепите файл.';
+                return;
+            }
+
+            // Проверка размера файла (максимум 10 МБ)
+            if (file.size > 10 * 1024 * 1024) {
+                responseDiv.innerHTML = 'Файл слишком большой. Максимальный размер — 10 МБ.';
+                return;
+            }
+
+            // Создаем FormData для отправки файла
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('message', message);
+            formData.append('file', file);
+            formData.append('userId', webApp.initDataUnsafe.user ? webApp.initDataUnsafe.user.id : 'unknown');
+            formData.append('firstName', webApp.initDataUnsafe.user ? webApp.initDataUnsafe.user.first_name : 'unknown');
+
+            try {
+                const response = await fetch('https://vibesync-server.herokuapp.com/submit', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    responseDiv.innerHTML = 'Заявка отправлена! Ожидайте ответа.';
+                } else {
+                    responseDiv.innerHTML = 'Ошибка при отправке заявки. Попробуйте снова.';
+                }
+            } catch (error) {
+                responseDiv.innerHTML = 'Ошибка: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
